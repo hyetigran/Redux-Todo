@@ -1,8 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
 import TodoList from '../components/TodoList';
 import TodoForm from '../components/TodoForm';
 import uuid from 'uuid';
 import '../components/Todo.css';
+import * as actionTypes from '../store/actions';
 
 class TodoContainer extends React.Component {
 	constructor(props) {
@@ -61,12 +64,12 @@ class TodoContainer extends React.Component {
 			<div className="TodoWrapper">
 				<h3>My ToDo List:</h3>
 				<TodoForm
-					toDoList={this.state.toDoList}
+					toDoList={this.props.todoList}
 					changeHandler={this.changeHandler}
 					selectHandler={this.selectHandler}
 					addTask={this.addTaskHandler}
 				/>
-				{this.state.toDoList.map(task => (
+				{this.props.todoList.map(task => (
 					<TodoList
 						key={task.id}
 						task={task}
@@ -80,4 +83,17 @@ class TodoContainer extends React.Component {
 	}
 }
 
-export default TodoContainer;
+const mapStateToProps = state => {
+	return {
+		todoList: state.todoList
+	};
+};
+
+const mapDispatchToProps = dispatch => {
+	return {
+		onAddedTodo: text => dispatch({ type: actionTypes.ADD_TODO, payload: { text: text } }),
+		onRemovedPerson: id => dispatch({ type: actionTypes.REMOVE_TODO, payload: id })
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoContainer);
