@@ -12,41 +12,18 @@ class TodoContainer extends React.Component {
 		super(props);
 		this.state = {
 			//toDoList: [],
-			toDoTask: ''
+			todoTask: ''
 			//isNotComplete: true
 		};
 	}
 	changeHandler = event => {
 		this.setState({
-			toDoTask: event.target.value
+			todoTask: event.target.value
 		});
 	};
 
 	addTaskHandler = () => {
-		this.props.onAddedTodo(this.state.toDoTask);
-	};
-
-	removeItemHandler = id => {
-		const newToDoList = this.state.toDoList.filter(el => el.id !== id);
-		this.setState({
-			toDoList: newToDoList
-		});
-	};
-
-	markCompleteHandler = id => {
-		this.setState(currentState => ({
-			toDoList: currentState.toDoList.map(task => {
-				if (task.id === id) {
-					task.isNotComplete = false;
-				}
-				return task;
-			})
-		}));
-	};
-	clearAllCompletedHandler = () => {
-		this.setState(currentState => ({
-			toDoList: currentState.toDoList.filter(task => task.isNotComplete)
-		}));
+		this.props.onAddedTodo(this.state.todoTask);
 	};
 
 	render() {
@@ -54,17 +31,16 @@ class TodoContainer extends React.Component {
 			<div className="TodoWrapper">
 				<h3>My ToDo List:</h3>
 				<TodoForm
-					toDoList={this.props.todoList}
+					todoList={this.props.todoList}
 					changeHandler={this.changeHandler}
-					selectHandler={this.selectHandler}
 					addTask={this.addTaskHandler}
 				/>
 				{this.props.todoList.map(task => (
 					<TodoList
 						key={task.id}
 						task={task}
-						markCompleteHandler={this.onMarkComplete}
-						removeItemHandler={this.removeItemHandler}
+						markCompleteHandler={this.props.onMarkComplete}
+						removeItemHandler={this.props.onRemovedTodo}
 					/>
 				))}
 				<button onClick={this.clearAllCompletedHandler}>Clear All Completed Tasks</button>
@@ -83,7 +59,7 @@ const mapDispatchToProps = dispatch => {
 	return {
 		onAddedTodo: task =>
 			dispatch({ type: actionTypes.ADD_TODO, payload: { id: uuid(), task: task, isNotComplete: true } }),
-		onRemovedPerson: id => dispatch({ type: actionTypes.REMOVE_TODO, payload: id }),
+		onRemovedTodo: id => dispatch({ type: actionTypes.REMOVE_TODO, payload: id }),
 		onMarkComplete: id => dispatch({ type: actionTypes.MARK_COMPLETE_TODO, payload: id })
 	};
 };

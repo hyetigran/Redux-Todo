@@ -1,11 +1,11 @@
 import React from 'react';
 import './Todo.css';
 
-function TodoForm({ toDoTask, changeHandler, addTask, clearItem, selectHandler }) {
+function TodoForm({ todoTask, changeHandler, addTask }) {
 	return (
 		<div>
-			<input value={toDoTask} onChange={changeHandler} placeholder="Enter your task" type="text">
-				{toDoTask}
+			<input value={todoTask} onChange={changeHandler} placeholder="Enter your task" type="text">
+				{todoTask}
 			</input>
 			<button onClick={addTask}>Add to List</button>
 			{/* <button onClick={clearItem}>Clear</button> */}

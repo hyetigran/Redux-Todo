@@ -10,19 +10,19 @@ const reducer = (state = initialState, action) => {
 		case actionTypes.ADD_TODO:
 			return { ...state, todoList: state.todoList.concat(action.payload) };
 		case actionTypes.REMOVE_TODO:
-			return {
-				...state,
-				todoList: state.todoList.filter(todo => todo.id !== action.payload)
-			};
-		case actionTypes.UPDATE_TODO:
-			return {
-				...state,
-				todoList: state.todoList.filter(todo => todo.id !== action.payload)
-			};
+			return { ...state, todoList: state.todoList.filter(task => task.id !== action.payload) };
 		case actionTypes.MARK_COMPLETE_TODO:
 			return {
 				...state,
-				todoList: state.todoList.filter(todo => todo.id !== action.payload)
+				todoList: state.todoList.map(task => {
+					if (task.id === action.payload) {
+						return {
+							...task,
+							isNotComplete: !task.isNotComplete
+						};
+					}
+					return task;
+				})
 			};
 		default:
 			return state;
