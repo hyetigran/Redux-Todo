@@ -11,9 +11,9 @@ class TodoContainer extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			toDoList: [],
-			toDoTask: '',
-			isNotComplete: true
+			//toDoList: [],
+			toDoTask: ''
+			//isNotComplete: true
 		};
 	}
 	changeHandler = event => {
@@ -23,17 +23,7 @@ class TodoContainer extends React.Component {
 	};
 
 	addTaskHandler = () => {
-		const newTask = {
-			id: uuid(),
-			task: this.state.toDoTask,
-			isNotComplete: true
-		};
-		const newToDoList = this.state.toDoList.concat(newTask);
-
-		this.setState({
-			toDoList: newToDoList,
-			toDoTask: ''
-		});
+		this.props.onAddedTodo(this.state.toDoTask);
 	};
 
 	removeItemHandler = id => {
@@ -73,7 +63,7 @@ class TodoContainer extends React.Component {
 					<TodoList
 						key={task.id}
 						task={task}
-						markCompleteHandler={this.markCompleteHandler}
+						markCompleteHandler={this.onMarkComplete}
 						removeItemHandler={this.removeItemHandler}
 					/>
 				))}
@@ -91,8 +81,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onAddedTodo: text => dispatch({ type: actionTypes.ADD_TODO, payload: { text: text } }),
-		onRemovedPerson: id => dispatch({ type: actionTypes.REMOVE_TODO, payload: id })
+		onAddedTodo: task =>
+			dispatch({ type: actionTypes.ADD_TODO, payload: { id: uuid(), task: task, isNotComplete: true } }),
+		onRemovedPerson: id => dispatch({ type: actionTypes.REMOVE_TODO, payload: id }),
+		onMarkComplete: id => dispatch({ type: actionTypes.MARK_COMPLETE_TODO, payload: id })
 	};
 };
 
